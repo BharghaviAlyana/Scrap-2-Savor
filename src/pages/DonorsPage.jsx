@@ -1,54 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../assets/styles/DonorsPage.module.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DonorsPage = () => {
   const [spoilageStatus, setSpoilageStatus] = useState("✅ Acceptable");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
+    setUser(auth.currentUser); // set user if already logged in
+
+    const unsubscribe = auth.onAuthStateChanged((u) => {
+      setUser(u);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleDonateClick = async () => {
+    const auth = getAuth();
     const user = auth.currentUser;
 
     if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    const db = getFirestore();
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      if (userData.role === "donor") {
+        alert("You're a verified donor. You can donate food.");
+        document
+          .querySelector(`.${styles.donationFormSection}`)
+          ?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        alert("Only users registered as donors can donate food.");
+        navigate("/register");
+      }
+    } else {
+      alert("User data not found. Please register.");
       navigate("/register");
     }
-  }, []);
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
+
     const auth = getAuth();
     const db = getFirestore();
     const user = auth.currentUser;
-  
+
     if (!user) {
-      alert("You need to register before donating.");
-      window.location.href = "/register";
+      alert("You need to log in before donating.");
+      navigate("/login");
       return;
     }
-  
+
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
-  
+
     if (docSnap.exists()) {
       const userData = docSnap.data();
       if (userData.role !== "donor") {
         alert("Only registered donors can donate food.");
+        navigate("/register");
         return;
       }
-  
-      // ✅ User is donor – allow form submission
+
       alert("Thank you for your donation!");
-      // TODO: Save form data to Firestore
+      // TODO: Save form data to Firestore here
     } else {
-      alert("User data not found. Please register again.");
-      window.location.href = "/register";
+      alert("User data not found. Please register.");
+      navigate("/register");
     }
   };
 
@@ -57,48 +89,16 @@ const DonorsPage = () => {
       <Navbar />
       <div className={styles.backgroundWrapper}>
         <div className={styles.donorsPage}>
-          /* Hero Section */
+          {/* Hero Section */}
           <div className={styles.heroSection}>
             <div className={styles.heroOverlay}></div>
             <h1>Your extra is someone’s enough.</h1>
-            <button
-              className={styles.ctaButton}
-              onClick={async () => {
-                const auth = getAuth();
-                const user = auth.currentUser;
-              
-                if (!user) {
-                  window.location.href = "/register"; // Not logged in, redirect
-                  return;
-                }
-              
-                const db = getFirestore();
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-              
-                if (docSnap.exists()) {
-                  const userData = docSnap.data();
-                  if (userData.role === "donor") {
-                    alert("You're a verified donor. You can donate food.");
-                    // Optionally scroll to the donation form
-                    document
-                      .querySelector(`.${styles.donationFormSection}`)
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    alert("Only users registered as donors can donate food.");
-                    window.location.href = "/register";
-                  }
-                } else {
-                  alert("User data not found. Please register again.");
-                  window.location.href = "/register";
-                }
-              }}
-            >
+            <button className={styles.ctaButton} onClick={handleDonateClick}>
               Donate Now
             </button>
           </div>
 
-          /* Donation Form */
+          {/* Donation Form */}
           <div className={styles.donationFormSection}>
             <h2>Donate Food</h2>
             <form className={styles.donorForm} onSubmit={handleFormSubmit}>
@@ -134,8 +134,8 @@ const DonorsPage = () => {
                 Status: <span>{spoilageStatus}</span>
               </div>
               <button type="submit" className={styles.submitButton}>
-  Submit Donation
-</button>
+                Submit Donation
+              </button>
             </form>
           </div>
 
