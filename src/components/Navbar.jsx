@@ -6,6 +6,11 @@ import logo from "../assets/images/logo.png";
 
 const Navbar = () => {
   return (
+<<<<<<< Updated upstream
+=======
+    <header>
+
+>>>>>>> Stashed changes
     <nav className="navbar">
       <div className="logo">
         <img src={logo} alt="Scrap to Savor Logo" />
@@ -25,6 +30,10 @@ const Navbar = () => {
         <li><Link to="/login">Login</Link></li>
       </ul>
     </nav>
+<<<<<<< Updated upstream
+=======
+    </header>
+>>>>>>> Stashed changes
   );
 };
 
