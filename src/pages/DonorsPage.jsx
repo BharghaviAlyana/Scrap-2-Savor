@@ -2,35 +2,21 @@ import React, { useState, useEffect } from 'react';
 import styles from "../assets/styles/DonorsPage.module.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-<<<<<<< Updated upstream
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-=======
 import MapPicker from '../components/MapPicker';
 import { getFirestore, doc, getDoc, collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
->>>>>>> Stashed changes
 import { getAuth } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 
 const DonorsPage = () => {
   const [spoilageStatus, setSpoilageStatus] = useState("✅ Acceptable");
-<<<<<<< Updated upstream
-  const [user, setUser] = useState(null);
-=======
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [user, setUser] = useState(null);
   const [donations, setDonations] = useState([]);
->>>>>>> Stashed changes
   const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
-<<<<<<< Updated upstream
-    setUser(auth.currentUser); // set user if already logged in
-
-    const unsubscribe = auth.onAuthStateChanged((u) => {
-      setUser(u);
-=======
     setUser(auth.currentUser);
 
     const unsubscribe = auth.onAuthStateChanged((u) => {
@@ -38,14 +24,11 @@ const DonorsPage = () => {
       if (u) {
         fetchDonations(u.uid);
       }
->>>>>>> Stashed changes
     });
 
     return () => unsubscribe();
   }, []);
 
-<<<<<<< Updated upstream
-=======
   const fetchDonations = async (uid) => {
     try {
       const db = getFirestore();
@@ -61,7 +44,6 @@ const DonorsPage = () => {
     }
   };
 
->>>>>>> Stashed changes
   const handleDonateClick = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -97,10 +79,7 @@ const DonorsPage = () => {
 
     const auth = getAuth();
     const db = getFirestore();
-<<<<<<< Updated upstream
-=======
     const storage = getStorage();
->>>>>>> Stashed changes
     const user = auth.currentUser;
 
     if (!user) {
@@ -112,21 +91,6 @@ const DonorsPage = () => {
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
 
-<<<<<<< Updated upstream
-    if (docSnap.exists()) {
-      const userData = docSnap.data();
-      if (userData.role !== "donor") {
-        alert("Only registered donors can donate food.");
-        navigate("/register");
-        return;
-      }
-
-      alert("Thank you for your donation!");
-      // TODO: Save form data to Firestore here
-    } else {
-      alert("User data not found. Please register.");
-      navigate("/register");
-=======
     if (!docSnap.exists()) {
       alert("User data not found. Please register.");
       navigate("/register");
@@ -178,7 +142,6 @@ const DonorsPage = () => {
     } catch (error) {
       console.error("Error saving donation:", error);
       alert("Failed to save donation. Please try again.");
->>>>>>> Stashed changes
     }
   };
 
@@ -218,16 +181,12 @@ const DonorsPage = () => {
               </div>
               <div className={styles.formGroup}>
                 <label>📍 Pickup Location</label>
-<<<<<<< Updated upstream
-                <input type="text" placeholder="Pickup Location" required />
-=======
                 <MapPicker setLocation={setSelectedLocation} />
                 {selectedLocation && (
                   <p>
                     Selected Location: Lat {selectedLocation.lat}, Lng {selectedLocation.lng}
                   </p>
                 )}
->>>>>>> Stashed changes
               </div>
               <div className={styles.formGroup}>
                 <label>📞 Contact Number</label>
@@ -235,11 +194,7 @@ const DonorsPage = () => {
               </div>
               <div className={styles.formGroup}>
                 <label>📸 Upload Image</label>
-<<<<<<< Updated upstream
-                <input type="file" />
-=======
                 <input type="file" accept="image/*" />
->>>>>>> Stashed changes
               </div>
               <div className={styles.spoilageStatus}>
                 Status: <span>{spoilageStatus}</span>
@@ -254,14 +209,6 @@ const DonorsPage = () => {
           <div className={styles.donationHistory}>
             <h2>Your Donation History</h2>
             <div className={styles.historyCards}>
-<<<<<<< Updated upstream
-              <div className={styles.historyCard}>
-                <img src="example.jpg" alt="Donation" />
-                <p>Status: ✅ Accepted</p>
-                <p>Date: 2023-10-01</p>
-                <p>Volunteer: John Doe</p>
-              </div>
-=======
               {donations.length > 0 ? (
                 donations.map((donation) => (
                   <div key={donation.id} className={styles.historyCard}>
@@ -282,7 +229,6 @@ const DonorsPage = () => {
               ) : (
                 <p>No donations made yet.</p>
               )}
->>>>>>> Stashed changes
             </div>
           </div>
         </div>

@@ -1,31 +1,3 @@
-<<<<<<< Updated upstream
-import React, { useState } from 'react';
-import styles from "../assets/styles/VolunteersPage.module.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-const VolunteersPage = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      location: "123 Main St, Cityville",
-      quantity: "10 kg",
-      expiry: "2023-10-05",
-      donorContact: "123-456-7890",
-    },
-    {
-      id: 2,
-      location: "456 Elm St, Townsville",
-      quantity: "5 kg",
-      expiry: "2023-10-06",
-      donorContact: "987-654-3210",
-    },
-  ]);
-
-  const handleAcceptRequest = (id) => {
-    alert(`Request ${id} accepted!`);
-=======
-// 🛠️ VOLUNTEERS PAGE FULL WORKING VERSION (UPDATED)
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -135,7 +107,6 @@ const VolunteersPage = () => {
       status: 'Assigned',
       assignedVolunteerId: user.uid,
     });
->>>>>>> Stashed changes
   };
 
   return (
@@ -143,16 +114,6 @@ const VolunteersPage = () => {
       <Navbar />
       <div className={styles.backgroundWrapper}>
         <div className={styles.volunteersPage}>
-<<<<<<< Updated upstream
-          {/* Hero Section */}
-          <div className={styles.heroSection}>
-            <div className={styles.heroOverlay}></div>
-            <h1>Be the reason someone smiles today.</h1>
-            <button className={styles.ctaButton}>View Requests Near You</button>
-          </div>
-
-          {/* Nearby Food Pickup Requests */}
-=======
           <div className={styles.heroSection}>
             <div className={styles.heroOverlay}></div>
             <h1>Be the reason someone smiles today.</h1>
@@ -160,28 +121,18 @@ const VolunteersPage = () => {
               View Requests Near You
             </button>
           </div>
-
->>>>>>> Stashed changes
           <div className={styles.pickupRequests}>
             <h2>Nearby Food Pickup Requests</h2>
             <div className={styles.requestsList}>
               {requests.map((request) => (
                 <div key={request.id} className={styles.requestCard}>
-<<<<<<< Updated upstream
-                  <p>📍 Location: {request.location}</p>
-                  <p>📦 Quantity: {request.quantity}</p>
-                  <p>📅 Expiry: {request.expiry}</p>
-                  <p>📞 Donor Contact: {request.donorContact}</p>
-                  <button
-                    onClick={() => handleAcceptRequest(request.id)}
-=======
+
                   <p>📍 Location: {request.pickupLocationText}</p>
                   <p>📦 Quantity: {request.quantity}</p>
                   <p>📅 Expiry: {request.expiryDate}</p>
                   <p>📞 Donor Contact: {request.contactNumber}</p>
                   <button
                     onClick={() => handleAcceptRequest(request)}
->>>>>>> Stashed changes
                     className={styles.acceptButton}
                   >
                     Accept & Optimize Route
@@ -191,20 +142,12 @@ const VolunteersPage = () => {
             </div>
           </div>
 
-<<<<<<< Updated upstream
-          {/* Volunteer Info */}
-=======
->>>>>>> Stashed changes
           <div className={styles.volunteerInfo}>
             <h2>Your Volunteer Profile</h2>
             <p>🎖️ Badge: Silver Helper</p>
             <p>✅ Tasks Completed: 15</p>
           </div>
 
-<<<<<<< Updated upstream
-          {/* Leaderboard */}
-=======
->>>>>>> Stashed changes
           <div className={styles.leaderboard}>
             <h2>Top Volunteers</h2>
             <ul>
@@ -220,8 +163,4 @@ const VolunteersPage = () => {
   );
 };
 
-<<<<<<< Updated upstream
 export default VolunteersPage;
-=======
-export default VolunteersPage;
->>>>>>> Stashed changes

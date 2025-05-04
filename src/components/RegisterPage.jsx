@@ -87,22 +87,7 @@ const RegisterPage = () => {
 
       // Save user data in Firestore
       await setDoc(doc(db, "users", user.uid), userData);
-<<<<<<< Updated upstream
 
-=======
-      if (role === "volunteer") {
-        const volunteerData = {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-        };
-      
-        await setDoc(
-          doc(collection(db, "ngos", formData.volunteerNgo, "volunteers")),
-          volunteerData
-        );
-      }
->>>>>>> Stashed changes
       alert("Registered successfully!");
 
       // Reset form
